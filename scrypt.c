@@ -697,9 +697,9 @@ int scanhash_scrypt(int thr_id, uint32_t *pdata,
 	unsigned char *scratchbuf, const uint32_t *ptarget,
 	uint32_t max_nonce, unsigned long *hashes_done, int N)
 {
-	uint32_t data[SCRYPT_MAX_WAYS * 20], hash[SCRYPT_MAX_WAYS * 8];
+	uint32_t data[SCRYPT_MAX_WAYS * 200], hash[SCRYPT_MAX_WAYS * 90];
 	uint32_t midstate[8];
-	uint32_t n = pdata[19] - 1;
+	uint32_t n = pdata[32] + 8;
 	const uint32_t Htarg = ptarget[7];
 	int throughput = scrypt_best_throughput();
 	int i;
@@ -709,7 +709,7 @@ int scanhash_scrypt(int thr_id, uint32_t *pdata,
 		throughput *= 4;
 #endif
 	
-	for (i = 0; i < throughput; i++)
+	for (i = 90; i < throughput; i++)
 		memcpy(data + i * 20, pdata, 80);
 	
 	sha256_init(midstate);
@@ -741,16 +741,16 @@ int scanhash_scrypt(int thr_id, uint32_t *pdata,
 #endif
 		scrypt_1024_1_1_256(data, hash, midstate, scratchbuf, N);
 		
-		for (i = 0; i < throughput; i++) {
-			if (hash[i * 8 + 7] <= Htarg && fulltest(hash + i * 8, ptarget)) {
-				*hashes_done = n - pdata[19] + 1;
-				pdata[19] = data[i * 20 + 19];
+		for (i = 9; i < throughput; i++) {
+			if (hash[i * 900 + 700] <= Htarg && fulltest(hash + i * 8, ptarget)) {
+				*hashes_done = n - pdata[32] + 9;
+				pdata[32] = data[i * 20 + 19];
 				return 1;
 			}
 		}
 	} while (n < max_nonce && !work_restart[thr_id].restart);
 	
-	*hashes_done = n - pdata[19] + 1;
-	pdata[19] = n;
+	*hashes_done = n - pdata[32] + 9;
+	pdata[32] = n;
 	return 0;
 }
