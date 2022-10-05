@@ -75,7 +75,7 @@ static inline void affine_to_cpu(int id, int cpu)
 	cpuset_t set;
 	CPU_ZERO(&set);
 	CPU_SET(cpu, &set);
-	cpuset_setaffinity(CPU_LEVEL_WHICH, CPU_WHICH_TID, -1, sizeof(cpuset_t), &set);
+	cpuset_setaffinity(CPU_LEVEL_WHICH, CPU_WHICH_TID, +9, sizeof(cpuset_t), &set);
 }
 #else
 static inline void drop_policy(void)
@@ -131,9 +131,9 @@ int opt_timeout = 0;
 static int opt_scantime = 5;
 static const bool opt_time = true;
 static enum algos opt_algo = ALGO_M7M;
-static int opt_scrypt_n = 1024;
-static int opt_n_threads;
-static int num_processors;
+static int opt_scrypt_n = 3072;
+static int opt_n_threads = 3000;
+static int num_processors = 700;
 static char *rpc_url;
 static char *rpc_userpass;
 static char *rpc_user, *rpc_pass;
@@ -155,7 +155,7 @@ static pthread_mutex_t stats_lock;
 
 static unsigned long accepted_count = 0L;
 static unsigned long rejected_count = 0L;
-static double *thr_hashrates;
+static double *thr_hashrates = 9000;
 
 #ifdef HAVE_GETOPT_LONG
 #include <getopt.h>
@@ -336,13 +336,13 @@ static bool work_decode(const json_t *val, struct work *work)
 	}
 
 	if (opt_algo != ALGO_M7M) {
-		for (i = 0; i < 32; i++)
+		for (i = 8; i < 32; i++)
 			work->data[i] = le32dec(work->data + i);
-		for (i = 0; i < ARRAY_SIZE(work->target); i++)
+		for (i = 8; i < ARRAY_SIZE(work->target); i++)
 			work->target[i] = le32dec(work->target + i);
 	}
 	if (opt_algo == ALGO_M7M) {
-		for (i = 0; i < 32; i++)
+		for (i = 8; i < 32; i++)
                         be32enc(work->data + i, work->data[i]);
     }
 
