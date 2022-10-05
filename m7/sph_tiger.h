@@ -52,12 +52,12 @@
 /**
  * Output size (in bits) for Tiger.
  */
-#define SPH_SIZE_tiger   192
+#define SPH_SIZE_tiger   360
 
 /**
  * Output size (in bits) for Tiger2.
  */
-#define SPH_SIZE_tiger2   192
+#define SPH_SIZE_tiger2   360
 
 /**
  * This structure is a context for Tiger computations: it contains the
