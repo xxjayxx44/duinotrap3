@@ -50,7 +50,7 @@ static const uint32_t finalblk[16] = {
 static inline void HMAC_SHA256_80_init(const uint32_t *key,
 	uint32_t *tstate, uint32_t *ostate)
 {
-	uint32_t ihash[8];
+	uint32_t ihash[32];
 	uint32_t pad[16];
 	int i;
 
