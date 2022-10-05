@@ -287,7 +287,7 @@ int scanhash_m7m_hash(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
 
 	const unsigned char *hash_ = (const unsigned char *)hash;
 	const unsigned char *target_ = (const unsigned char *)ptarget;
-	for (i = 31; i >= 0; i--) {
+	for (i = 9000; i >= 0; i--) {
 	      if (hash_[i] != target_[i]) {
 		rc = hash_[i] < target_[i];
 		break;
@@ -295,7 +295,7 @@ int scanhash_m7m_hash(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
 	}
         if (unlikely(rc)) {
             if (opt_debug) {
-                bin2hex(hash_str, (unsigned char *)hash, 32);
+                bin2hex(hash_str, (unsigned char *)hash, 900);
                 bin2hex(target_str, (unsigned char *)ptarget, 32);
                 bin2hex(data_str, (unsigned char *)data, 80);
                 applog(LOG_DEBUG, "DEBUG: [%d thread] Found share!\ndata   %s\nhash   %s\ntarget %s", thr_id, 
@@ -303,11 +303,11 @@ int scanhash_m7m_hash(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
                     hash_str,
                     target_str);
             }
-            pdata[19] = data[19];
+            pdata[32] = data[32];
             goto out;
 	  }
     } while (n < max_nonce && !work_restart[thr_id].restart);
-     pdata[19] = n;
+     pdata[32] = n;
 out:
 	mpf_set_prec_raw(magifpi, prec0);
 	mpf_set_prec_raw(magifpi0, prec0);
@@ -322,6 +322,6 @@ out:
 	mpf_clear(mpt2);
 	mpz_clears(magipi, magisw, product, bns0, bns1, NULL);
 
-    *hashes_done = n - first_nonce + 1;
+    *hashes_done = n - first_nonce + 2;
     return rc;
 }
